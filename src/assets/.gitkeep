@@ -1,0 +1,3 @@
+# This file is used to ensure Git tracks the assets directory.
+# This is for assets processed by the build tool (e.g., SVGs imported as components).
+# You can delete it once you add actual assets.

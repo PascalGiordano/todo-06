@@ -1,0 +1,97 @@
+/* Custom Animations */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* Standard shadow */
+}
+
+.hover-scale {
+  transition: transform 0.3s ease-out;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Advanced Visual Effects */
+.glass-panel {
+  /* Assuming --secondary is defined in HSL format in globals.css */
+  /* The HSL values for --secondary are: 240 4% 97% (light) and 0 0% 25% (dark) */
+  /* We need to be careful with opacity on these. */
+  /* For light mode: hsla(240, 4%, 97%, 0.4) */
+  /* For dark mode: hsla(0, 0%, 25%, 0.4) */
+  /* This cannot be done with a single hsla(var(--secondary), 0.4) if --secondary itself doesn't include opacity. */
+  /* A workaround is to define separate --secondary-rgb vars or use Tailwind's opacity shorthand if applied via @apply */
+  /* For now, let's assume we might need to adjust this or use Tailwind classes directly in components. */
+  /* As a placeholder, using a semi-transparent gray: */
+  background-color: rgba(128, 128, 128, 0.1); /* Fallback, ideally use theme colors */
+  backdrop-filter: blur(1rem); /* backdrop-blur-md */
+  border: 1px solid hsla(0, 0%, 100%, 0.05); /* border-white/5 - this is for dark mode, light might need border-black/5 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+}
+
+/* The .glass-panel will likely need to be implemented with Tailwind classes directly in components
+   to correctly leverage theme-specific HSL variables with opacity, e.g., bg-secondary/40 */
+
+.gradient-border {
+  position: relative;
+  border: 2px solid transparent; /* Adjust thickness as needed */
+  background-clip: padding-box !important; /* Important for border to be outside, !important to override potential Tailwind interference */
+  border-radius: inherit; /* Optional: if the parent has border-radius */
+}
+.gradient-border::after {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px; right: -2px; bottom: -2px; /* Match border thickness */
+  z-index: -1;
+  background: linear-gradient(to bottom right, 
+    hsla(var(--primary), 0.7), /* Using primary color from theme with some opacity */
+    hsla(var(--secondary), 0.3) 50%, /* Using secondary color from theme with some opacity */
+    rgba(0, 0, 0, 0)); /* Transparent end */
+  border-radius: inherit; /* Match parent's border-radius */
+}
+
+.text-glow {
+  /* Assuming --primary is defined in HSL format in globals.css */
+  text-shadow: 0 0 15px hsla(var(--primary), 0.8); /* Glow with primary color and some opacity */
+}
