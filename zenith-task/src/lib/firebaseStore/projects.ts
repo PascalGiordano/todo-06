@@ -107,19 +107,41 @@ export const getProjectById = async (projectId: string): Promise<Project | null>
   }
 };
 
-// Optional: UpdateProject function
-// export const updateProject = async (projectId: string, updates: UpdateProjectData): Promise<void> => {
-//   try {
-//     const projectDocRef = doc(db, PROJECTS_COLLECTION, projectId);
-//     await updateDoc(projectDocRef, {
-//       ...updates,
-//       updatedAt: serverTimestamp() as Timestamp,
-//     });
-//   } catch (error) {
-//     console.error("Error updating project: ", error);
-//     throw new Error('Failed to update project. See console for details.');
-//   }
-// };
+/**
+ * Updates an existing project in Firestore.
+ * @param projectId The ID of the project to update.
+ * @param projectData An object containing the project fields to update.
+ *                    `id` and `createdAt` should not be included. `updatedAt` is automatically set.
+ */
+export const updateProject = async (projectId: string, projectData: Partial<Omit<Project, 'id' | 'createdAt'>>): Promise<void> => {
+  try {
+    if (!projectId) {
+      throw new Error("Project ID is required for updating.");
+    }
+    const projectDocRef = doc(db, PROJECTS_COLLECTION, projectId);
+    
+    // Construct the update object, ensuring serverTimestamp is correctly typed
+    const updateObject: Record<string, any> = { ...projectData };
+    updateObject.updatedAt = serverTimestamp() as Timestamp;
+
+    // If startDate or endDate are passed as date strings, convert them to Timestamps
+    // This assumes projectData might come from a form where dates are strings
+    if (projectData.startDate && typeof projectData.startDate === 'string') {
+        updateObject.startDate = Timestamp.fromDate(new Date(projectData.startDate));
+    }
+    if (projectData.endDate && typeof projectData.endDate === 'string') {
+        updateObject.endDate = Timestamp.fromDate(new Date(projectData.endDate));
+    }
+    // Note: If startDate/endDate in projectData are already Firestore Timestamps (e.g. from a fetched project object),
+    // they will be fine as is. The above conversion is for string inputs from forms.
+
+    await updateDoc(projectDocRef, updateObject);
+  } catch (error) {
+    console.error("Error updating project: ", error);
+    // Consider more specific error types or logging frameworks in a real app
+    throw new Error(`Failed to update project ${projectId}. See console for details.`);
+  }
+};
 
 // Optional: DeleteProject function
 // export const deleteProject = async (projectId: string): Promise<void> => {

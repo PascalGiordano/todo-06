@@ -2,34 +2,42 @@
 
 import React, { useState, Fragment, FormEvent, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon, CheckCircleIcon, ExclamationCircleIcon } from 'lucide-react'; // Assuming XIcon is X
+import { XIcon, CheckCircleIcon, ExclamationCircleIcon, ChevronDownIcon } from 'lucide-react';
 import { addProject } from '@/lib/firebaseStore/projects';
-import type { ProjectStatus, Category, Tag, NewProjectData } from '@/types/project'; // Ensure correct path
+import { ProjectStatus, Category, Tag, NewProjectData } from '@/types/project'; // Ensure correct path
 import { Timestamp } from 'firebase/firestore';
 
-interface CreateProjectModalProps {
+interface ProjectFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onProjectCreated?: () => void; // Optional callback to refresh project list
+  onProjectCreated?: () => void;
 }
 
-const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose, onProjectCreated }) => {
+const PROJECT_STATUSES: ProjectStatus[] = ["Planning", "In Progress", "On Hold", "Completed", "Archived"];
+
+const ProjectFormModal: React.FC<ProjectFormModalProps> = ({ isOpen, onClose, onProjectCreated }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState(''); // Store as YYYY-MM-DD string from input
-  const [endDate, setEndDate] = useState('');     // Store as YYYY-MM-DD string from input
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [status, setStatus] = useState<ProjectStatus>("Planning"); // Default status
+  const [categoriesInput, setCategoriesInput] = useState(''); // Comma-separated string
+  const [tagsInput, setTagsInput] = useState('');             // Comma-separated string
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Reset form when modal opens or closes
   useEffect(() => {
     if (!isOpen) {
+      // Reset all fields when modal is closed or opened
       setTitle('');
       setDescription('');
       setStartDate('');
       setEndDate('');
+      setStatus("Planning");
+      setCategoriesInput('');
+      setTagsInput('');
       setError(null);
       setSuccessMessage(null);
       setIsSubmitting(false);
@@ -53,20 +61,34 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
         setError("End date cannot be before start date.");
         return;
     }
+    if (!status) {
+      setError("Status is required.");
+      return;
+    }
 
     setIsSubmitting(true);
 
-    // Prepare data for Firestore
-    // For this phase, status, categories, tags, userIds are placeholders or defaults
+    const categoriesArray: Category[] = categoriesInput
+      .split(',')
+      .map(cat => cat.trim())
+      .filter(cat => cat)
+      .map(catName => ({ id: catName.toLowerCase().replace(/\s+/g, '-'), name: catName, color: 'gray' })); // Placeholder color/id logic
+
+    const tagsArray: Tag[] = tagsInput
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag)
+      .map(tagName => ({ id: tagName.toLowerCase().replace(/\s+/g, '-'), name: tagName, color: 'gray' })); // Placeholder color/id logic
+    
     const projectData: Omit<NewProjectData, 'createdAt' | 'updatedAt'> = {
       title: title.trim(),
       description: description.trim(),
       startDate: Timestamp.fromDate(new Date(startDate)),
       endDate: Timestamp.fromDate(new Date(endDate)),
-      status: "Planning" as ProjectStatus, // Default status
-      categories: [] as Category[],        // Placeholder
-      tags: [] as Tag[],                   // Placeholder
-      userIds: ["user123_placeholder"],    // Placeholder, replace with actual user ID later
+      status: status,
+      categories: categoriesArray,
+      tags: tagsArray,
+      userIds: ["user123_placeholder"], // Placeholder, replace with actual user ID later
     };
 
     try {
@@ -160,7 +182,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
                       disabled={isSubmitting}
                     />
                   </div>
-
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="project-start-date" className="block text-sm font-medium text-muted-foreground mb-1">
@@ -173,7 +195,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
                         onChange={(e) => setStartDate(e.target.value)}
                         className="w-full bg-gray-800/60 border border-gray-600 text-foreground rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-150 placeholder-gray-500"
                         disabled={isSubmitting}
-                        min={new Date().toISOString().split('T')[0]} // Optional: Prevent past start dates
+                        min={new Date().toISOString().split('T')[0]} 
                       />
                     </div>
                     <div>
@@ -187,11 +209,68 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
                         onChange={(e) => setEndDate(e.target.value)}
                         className="w-full bg-gray-800/60 border border-gray-600 text-foreground rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-150 placeholder-gray-500"
                         disabled={isSubmitting}
-                        min={startDate || new Date().toISOString().split('T')[0]} // End date cannot be before start date
+                        min={startDate || new Date().toISOString().split('T')[0]}
                       />
                     </div>
                   </div>
+
+                  <div>
+                    <label htmlFor="project-status" className="block text-sm font-medium text-muted-foreground mb-1">
+                      Status <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        id="project-status"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value as ProjectStatus)}
+                        disabled={isSubmitting}
+                        className="w-full appearance-none bg-gray-800/60 border border-gray-600 text-foreground rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-150 pr-8"
+                      >
+                        {PROJECT_STATUSES.map(s => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                      <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="project-categories" className="block text-sm font-medium text-muted-foreground mb-1">
+                      Categories <span className="text-xs">(comma-separated)</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="project-categories"
+                      value={categoriesInput}
+                      onChange={(e) => setCategoriesInput(e.target.value)}
+                      className="w-full bg-gray-800/60 border border-gray-600 text-foreground rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-150 placeholder-gray-500"
+                      placeholder="e.g., Marketing, Development, Design"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="project-tags" className="block text-sm font-medium text-muted-foreground mb-1">
+                      Tags <span className="text-xs">(comma-separated)</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="project-tags"
+                      value={tagsInput}
+                      onChange={(e) => setTagsInput(e.target.value)}
+                      className="w-full bg-gray-800/60 border border-gray-600 text-foreground rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-150 placeholder-gray-500"
+                      placeholder="e.g., Urgent, Q4, Internal"
+                      disabled={isSubmitting}
+                    />
+                  </div>
                   
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1">Assign Users</label>
+                    <p className="text-sm text-gray-500 bg-gray-800/30 p-3 rounded-lg border border-dashed border-gray-600">
+                      User assignment functionality will be available soon.
+                    </p>
+                  </div>
+
                   {error && (
                     <div className="flex items-center text-sm text-red-400 bg-red-900/30 border border-red-700/50 p-3 rounded-lg">
                       <ExclamationCircleIcon size={20} className="mr-2 flex-shrink-0" />
@@ -216,7 +295,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
                     </button>
                     <button
                       type="submit"
-                      disabled={isSubmitting || !!successMessage} // Disable if submitting or already succeeded
+                      disabled={isSubmitting || !!successMessage} 
                       className="px-6 py-2.5 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg transition-colors duration-150 disabled:opacity-60 flex items-center"
                     >
                       {isSubmitting && !successMessage ? (
@@ -240,4 +319,4 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ isOpen, onClose
   );
 };
 
-export default CreateProjectModal;
+export default ProjectFormModal;

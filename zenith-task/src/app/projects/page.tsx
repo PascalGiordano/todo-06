@@ -7,7 +7,7 @@ import DashboardLayout from '@/components/layout/dashboard-layout';
 import { getProjects } from '@/lib/firebaseStore/projects';
 import type { Project } from '@/types/project';
 import { format } from 'date-fns';
-import CreateProjectModal from '@/components/projects/create-project-modal'; // Import the modal
+import ProjectFormModal from '@/components/projects/project-form-modal'; // Updated import
 
 const ProjectsPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -61,7 +61,7 @@ const ProjectsPage: React.FC = () => {
         </button>
       </div>
 
-      <CreateProjectModal 
+      <ProjectFormModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onProjectCreated={handleProjectCreated}
