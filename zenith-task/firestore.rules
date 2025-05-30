@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Projects Collection
+    // Allow authenticated users to read and write (create, update, delete) projects.
+    // For more granular control, you might check if request.auth.uid is in project.userIds
+    // or if the user has a specific role.
+    // For now, any authenticated user can manage any project.
+    match /projects/{projectId} {
+      allow read, write: if request.auth != null;
+      // Example for more granular create:
+      // allow create: if request.auth != null && request.resource.data.userIds.hasAny([request.auth.uid]);
+      // Example for more granular update/delete (owner or collaborator):
+      // allow update, delete: if request.auth != null && resource.data.userIds.hasAny([request.auth.uid]);
+      // Example for read (public projects or collaborators):
+      // allow read: if resource.data.isPublic == true || (request.auth != null && resource.data.userIds.hasAny([request.auth.uid]));
+    }
+
+    // Users Collection (Example - if you add user profiles later)
+    // match /users/{userId} {
+    //   allow read: if request.auth != null;
+    //   allow write: if request.auth != null && request.auth.uid == userId;
+    // }
+
+    // Add rules for other collections as needed (e.g., tasks, notes)
+    // match /tasks/{taskId} {
+    //   allow read, write: if request.auth != null; // Placeholder, refine based on task ownership/project membership
+    // }
+  }
+}
