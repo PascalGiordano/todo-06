@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation'; // useParams for dynamic route, useRouter for navigation
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeftIcon, CalendarIcon, TagIcon, FolderIcon, CheckCircleIcon, InfoIcon, Edit3Icon } from 'lucide-react'; // Example icons
+import { ArrowLeftIcon, CalendarIcon, TagIcon, FolderIcon, CheckCircleIcon, InfoIcon, Edit3Icon, LayoutDashboardIcon } from 'lucide-react'; // Added LayoutDashboardIcon
 import DashboardLayout from '@/components/layout/dashboard-layout';
 import { getProjectById } from '@/lib/firebaseStore/projects';
 import type { Project, Category, Tag } from '@/types/project';
+import KanbanBoard from '@/components/kanban/kanban-board'; // Import KanbanBoard
 import { format } from 'date-fns';
 import { Timestamp } from 'firebase/firestore';
 
@@ -222,6 +223,23 @@ const ProjectDetailPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Kanban Board Section */}
+        <div className="mt-12">
+          <div className="flex items-center mb-6">
+            <LayoutDashboardIcon size={28} className="mr-3 text-primary" />
+            <h2 className="text-2xl font-semibold text-foreground">Task Board</h2>
+          </div>
+          <div className="bg-gray-800/30 p-1 rounded-lg border border-gray-700/80 shadow-lg overflow-hidden">
+             {/* Ensure projectId is passed and is a string */}
+            {projectId && typeof projectId === 'string' ? (
+              <KanbanBoard projectId={projectId} />
+            ) : (
+              <p className="text-muted-foreground p-4">Project ID not available for Kanban board.</p>
+            )}
+          </div>
+        </div>
+
       </div>
     </DashboardLayout>
   );
