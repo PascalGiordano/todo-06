@@ -24,7 +24,16 @@ service cloud.firestore {
     //   allow write: if request.auth != null && request.auth.uid == userId;
     // }
 
-    // Add rules for other collections as needed (e.g., tasks, notes)
+    // Notes Collection
+    // Users can only manage their own notes.
+    match /notes/{noteId} {
+      // Allow create only if the userId in the new document matches the authenticated user's UID.
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      // Allow read, update, delete if the authenticated user's UID matches the userId on the existing document.
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // Tasks Collection (Example placeholder)
     // match /tasks/{taskId} {
     //   allow read, write: if request.auth != null; // Placeholder, refine based on task ownership/project membership
     // }
