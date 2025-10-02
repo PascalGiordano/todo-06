@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar - The Ultimate ToDo Experience</title>
+    <meta name="description" content="Stellar is a ToDo app that combines spectacular design with powerful features to help you achieve your goals.">
+
+    <!-- SEO / Social Media -->
+    <meta property="og:title" content="Stellar - The Ultimate ToDo Experience">
+    <meta property="og:description" content="Experience productivity like never before.">
+    <meta property="og:image" content="assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preconnect to CDNs for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide-react@0.292.0/dist/lucide-react.js"></script>
+    <script src="https://unpkg.com/lucide-static@latest/umd/lucide.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div id="cursor-glow"></div>
+    <div class="background-mesh"></div>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <i data-lucide="sparkles"></i>
+                <span>Stellar</span>
+            </div>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#testimonials">Testimonials</a>
+            </nav>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="login-btn">Log In</button>
+                <button class="btn btn-primary" id="signup-btn-main">Get Started <i data-lucide="arrow-right" class="icon-sm"></i></button>
+                <button class="theme-toggle" id="theme-toggle-landing">
+                    <i data-lucide="sun" class="sun"></i>
+                    <i data-lucide="moon" class="moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">Productivity,</span> Reimagined.
+                    </h1>
+                    <p class="hero-subtitle">
+                        Stellar is not just a ToDo app. It's a breathtaking experience designed to bring clarity, focus, and accomplishment to your life.
+                    </p>
+                    <div class="hero-cta">
+                        <button class="btn btn-primary btn-lg">
+                            Start Your Journey <i data-lucide="rocket" class="icon-md"></i>
+                        </button>
+                    </div>
+                    <div class="app-preview-container">
+                        <div class="app-preview">
+                            <!-- Mockup of the app will be styled with CSS -->
+                            <div class="mockup-header"></div>
+                            <div class="mockup-body"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features-bento">
+            <div class="container">
+                <h2 class="section-title">A Symphony of Features</h2>
+                <div class="bento-grid">
+                    <div class="bento-item" style="--col-span: 2; --row-span: 2;">
+                        <h3>Multi-View Dashboard</h3>
+                        <p>List, Grid, Kanban, Calendar. Your tasks, your way.</p>
+                    </div>
+                    <div class="bento-item">
+                        <h3>Deep Customization</h3>
+                        <p>Craft your perfect workspace.</p>
+                    </div>
+                    <div class="bento-item">
+                        <h3>AI-Powered Search</h3>
+                        <p>Find anything, instantly.</p>
+                    </div>
+                    <div class="bento-item" style="--col-span: 2; --row-span: 1;">
+                        <h3>Seamless Collaboration</h3>
+                        <p>Achieve goals together with real-time sync.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer-landing">
+        <div class="container">
+            <p>&copy; 2024 Stellar. All rights reserved. A masterpiece of productivity.</p>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal-container" class="hidden">
+        <div class="auth-modal">
+            <button class="close-modal" id="close-auth-modal"><i data-lucide="x"></i></button>
+            <div class="auth-content">
+                <!-- Login and Signup forms will be injected here by auth.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+/* ============================================
+   1. CSS VARIABLES (Custom Properties)
+   ============================================ */
+:root {
+  /* Colors - Light Mode */
+  --bg-primary-light: #FFFFFF;
+  --bg-secondary-light: #F8FAFC;
+  --bg-tertiary-light: #F1F5F9;
+  --text-primary-light: #0F172A;
+  --text-secondary-light: #334155;
+  --text-tertiary-light: #64748B;
+  --border-light: rgba(0, 0, 0, 0.1);
+  --shadow-color-light: rgba(0, 0, 0, 0.1);
+
+  /* Colors - Dark Mode */
+  --bg-primary-dark: #0A0F1E;
+  --bg-secondary-dark: #1A1F2E;
+  --bg-tertiary-dark: #2A2F3E;
+  --text-primary-dark: #F1F5F9;
+  --text-secondary-dark: #CBD5E1;
+  --text-tertiary-dark: #94A3B8;
+  --border-dark: rgba(255, 255, 255, 0.1);
+  --shadow-color-dark: rgba(0, 0, 0, 0.5);
+
+  /* Accent Colors */
+  --accent-blue: #3B82F6;
+  --accent-purple: #8B5CF6;
+  --accent-pink: #EC4899;
+  --accent-green: #10B981;
+  --accent-orange: #F59E0B;
+  --accent-red: #EF4444;
+
+  /* Semantic Colors */
+  --color-success: var(--accent-green);
+  --color-warning: var(--accent-orange);
+  --color-error: var(--accent-red);
+  --color-info: var(--accent-blue);
+
+  /* Gradients */
+  --gradient-blue-dream: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-sunset: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-ocean: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-text: var(--gradient-blue-dream);
+
+  /* Typography */
+  --font-primary: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --fs-xs: 0.75rem;   /* 12px */
+  --fs-sm: 0.875rem;  /* 14px */
+  --fs-base: 1rem;    /* 16px */
+  --fs-lg: 1.125rem;  /* 18px */
+  --fs-xl: 1.25rem;   /* 20px */
+  --fs-2xl: 1.5rem;   /* 24px */
+  --fs-3xl: 1.875rem; /* 30px */
+  --fs-4xl: 2.25rem;  /* 36px */
+  --fs-5xl: 3rem;     /* 48px */
+  --fs-6xl: 3.75rem;  /* 60px */
+  --fs-7xl: 4.5rem;   /* 72px */
+
+  --fw-light: 300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.75;
+
+  /* Spacing */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-base: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px var(--shadow-color);
+  --shadow-base: 0 4px 6px var(--shadow-color);
+  --shadow-md: 0 6px 12px var(--shadow-color);
+  --shadow-lg: 0 10px 25px var(--shadow-color);
+  --shadow-xl: 0 20px 40px var(--shadow-color);
+  --shadow-inner: inset 0 2px 4px var(--shadow-color);
+  --shadow-glow: 0 0 20px var(--accent-color);
+
+  /* Transitions */
+  --transition-fast: 150ms;
+  --transition-base: 300ms;
+  --transition-slow: 500ms;
+  --easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-Index */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-notification: 1080;
+
+  /* Default Theme: Dark */
+  --bg-primary: var(--bg-primary-dark);
+  --bg-secondary: var(--bg-secondary-dark);
+  --bg-tertiary: var(--bg-tertiary-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --text-tertiary: var(--text-tertiary-dark);
+  --border-color: var(--border-dark);
+  --shadow-color: var(--shadow-color-dark);
+  --accent-color: var(--accent-blue);
+}
+
+[data-theme="light"] {
+  --bg-primary: var(--bg-primary-light);
+  --bg-secondary: var(--bg-secondary-light);
+  --bg-tertiary: var(--bg-tertiary-light);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+  --text-tertiary: var(--text-tertiary-light);
+  --border-color: var(--border-light);
+  --shadow-color: var(--shadow-color-light);
+}
+
+/* ============================================
+   2. RESET & BASE STYLES
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  line-height: var(--lh-normal);
+  font-size: var(--fs-base);
+  color: var(--text-secondary);
+  background-color: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-base) var(--easing), color var(--transition-base) var(--easing);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color var(--transition-fast) var(--easing);
+}
+
+a:hover {
+  color: var(--text-primary);
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================
+   3. UTILITY CLASSES
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    animation: gradientShift 5s ease infinite;
+    background-size: 200% 200%;
+}
+
+.icon-sm {
+    width: var(--fs-base);
+    height: var(--fs-base);
+    margin-left: var(--space-1);
+}
+.icon-md {
+    width: var(--fs-lg);
+    height: var(--fs-lg);
+    margin-left: var(--space-2);
+}

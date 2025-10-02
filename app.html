@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Dashboard</title>
+    <meta name="description" content="Your personal space for achieving greatness.">
+
+    <!-- Preconnect to CDNs for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide-static@latest/umd/lucide.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/app.css">
+
+</head>
+<body class="app-body">
+    <!-- Auth Guard: Redirects if not logged in -->
+    <script>
+        if (!localStorage.getItem('stellar-user')) {
+            // window.location.href = 'index.html';
+            console.log("Redirect to index.html would happen here."); // Placeholder for now
+        }
+    </script>
+
+    <div id="cursor-glow"></div>
+
+    <div class="sidebar-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i data-lucide="sparkles"></i>
+                    <span class="logo-text">Stellar</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i data-lucide="inbox"></i>
+                    <span class="nav-text">Inbox</span>
+                    <span class="nav-badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="star"></i>
+                    <span class="nav-text">Today</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="calendar"></i>
+                    <span class="nav-text">Upcoming</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="filter"></i>
+                    <span class="nav-text">Filters & Tags</span>
+                </a>
+            </nav>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-projects">
+                <div class="projects-header">
+                    <h3 class="nav-text">My Lists</h3>
+                    <button class="btn-icon"><i data-lucide="plus"></i></button>
+                </div>
+                <!-- Project list will be dynamically generated -->
+            </div>
+            <div class="sidebar-footer">
+                <button class="sidebar-collapse-btn">
+                    <i data-lucide="chevrons-left"></i>
+                    <span class="nav-text">Collapse</span>
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <div class="main-container">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="btn-icon mobile-menu-btn"><i data-lucide="menu"></i></button>
+                <div class="breadcrumb">
+                    <span>Tasks</span>
+                    <i data-lucide="chevron-right"></i>
+                    <span>My Day</span>
+                </div>
+            </div>
+            <div class="topbar-center">
+                <div class="search-bar">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Search tasks, projects, tags...">
+                    <div class="shortcut-hint">Ctrl+K</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-icon"><i data-lucide="bell"></i></button>
+                <button class="theme-toggle" id="theme-toggle-app">
+                    <i data-lucide="sun" class="sun"></i>
+                    <i data-lucide="moon" class="moon"></i>
+                </button>
+                <div class="user-menu">
+                    <img src="https://i.pravatar.cc/40" alt="User Avatar" class="avatar" id="user-avatar-btn">
+                    <div class="dropdown-menu hidden" id="user-menu-dropdown">
+                        <div class="dropdown-header">
+                            <span class="user-name">Demo User</span>
+                            <span class="user-email">demo@stellar.app</span>
+                        </div>
+                        <a href="#" class="dropdown-item" id="open-settings-btn">
+                            <i data-lucide="settings"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i data-lucide="log-out"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1>My Day</h1>
+                <div class="view-options">
+                    <button class="btn btn-secondary filter-btn">
+                        <i data-lucide="filter"></i>
+                        <span>Filter</span>
+                    </button>
+                    <div class="view-switcher">
+                        <button class="btn-icon active" data-view="list" title="List View">
+                            <i data-lucide="list"></i>
+                        </button>
+                        <button class="btn-icon" data-view="grid" title="Grid View">
+                            <i data-lucide="layout-grid"></i>
+                        </button>
+                        <button class="btn-icon" data-view="kanban" title="Kanban View">
+                            <i data-lucide="columns"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary add-task-btn">
+                        <i data-lucide="plus"></i>
+                        <span>Add Task</span>
+                    </button>
+                </div>
+            </div>
+            <div class="task-area">
+                <!-- Task lists, grid, kanban board, etc. will be rendered here -->
+            </div>
+        </main>
+    </div>
+
+    <aside class="filter-sidebar">
+        <div class="filter-sidebar-header">
+            <h3>Filters</h3>
+            <button class="btn-icon close-filters-btn"><i data-lucide="x"></i></button>
+        </div>
+        <div class="filter-sidebar-content">
+            <div class="filter-group">
+                <h4>Status</h4>
+                <select id="filter-status">
+                    <option value="all">All</option>
+                    <option value="incomplete">Incomplete</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <!-- More filter groups can be added here -->
+        </div>
+    </aside>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal-container" class="hidden">
+         <div class="modal-backdrop"></div>
+         <div class="settings-modal">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button class="btn-icon close-settings-btn"><i data-lucide="x"></i></button>
+            </div>
+            <div class="settings-body">
+                <aside class="settings-nav">
+                    <a href="#" class="settings-nav-item active" data-section="appearance">
+                        <i data-lucide="palette"></i>
+                        <span>Appearance</span>
+                    </a>
+                    <a href="#" class="settings-nav-item" data-section="account">
+                        <i data-lucide="user"></i>
+                        <span>Account</span>
+                    </a>
+                </aside>
+                <main class="settings-content">
+                    <div class="settings-section" id="settings-appearance">
+                        <h4>Accent Color</h4>
+                        <div class="accent-color-switcher">
+                            <button class="color-swatch" data-color="var(--accent-blue)" style="--swatch-color: var(--accent-blue);"></button>
+                            <button class="color-swatch" data-color="var(--accent-purple)" style="--swatch-color: var(--accent-purple);"></button>
+                            <button class="color-swatch" data-color="var(--accent-pink)" style="--swatch-color: var(--accent-pink);"></button>
+                            <button class="color-swatch" data-color="var(--accent-green)" style="--swatch-color: var(--accent-green);"></button>
+                            <button class="color-swatch" data-color="var(--accent-orange)" style="--swatch-color: var(--accent-orange);"></button>
+                            <button class="color-swatch" data-color="var(--accent-red)" style="--swatch-color: var(--accent-red);"></button>
+                        </div>
+                    </div>
+                    <div class="settings-section hidden" id="settings-account">
+                        <h4>Account Information</h4>
+                        <p>Manage your account details here.</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Task Drawer -->
+    <div id="task-drawer-container" class="hidden">
+        <div class="drawer-backdrop"></div>
+        <div class="drawer">
+            <div class="drawer-header">
+                <h2>New Task</h2>
+                <button class="btn-icon close-drawer-btn"><i data-lucide="x"></i></button>
+            </div>
+            <div class="drawer-content">
+                <form id="add-task-form">
+                    <div class="form-group">
+                        <input type="text" id="new-task-title" placeholder="e.g., Design the new logo" required>
+                        <label for="new-task-title">Task Title</label>
+                    </div>
+                    <!-- More fields like description, priority, etc. will go here -->
+                    <div class="drawer-footer">
+                        <button type="button" class="btn btn-secondary close-drawer-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/theme.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
